@@ -170,6 +170,15 @@ Lexer::Lexer(string t)
 			{
 				type = next();
 			}
+			table.insert(pair<string, Token>(text.substr(rn, n - rn - 1), Token(NUM, text.substr(rn, n - rn - 1), rr, rc)));
+			tokens.push_back(Token(NUM, text.substr(rn, n - rn - 1), rr, rc));
+			break;
+			/*rr = r; rc = c - 1; rn = n - 1;
+			type = next();
+			while (type == DIGIT)
+			{
+				type = next();
+			}
 			if (type == PERIOD)
 			{
 				type = next();
@@ -191,7 +200,7 @@ Lexer::Lexer(string t)
 			}
 			table.insert(pair<string, Token>(text.substr(rn, n - rn - 1), Token(NUM, text.substr(rn, n - rn - 1), rr, rc)));
 			tokens.push_back(Token(NUM, text.substr(rn, n - rn - 1), rr, rc));
-			break;
+			break;*/
 		case LETTER:
 			rr = r; rc = c - 1; rn = n - 1;
 			type = next();
@@ -425,12 +434,25 @@ Token Lexer::nextToken()
 	if (cur != tokens.size())
 		return tokens[cur++];
 	if (tokens.empty())
+	{
+		errorTokens.push_back(Token(PERIODSYM, ".", 1, 1));
 		return Token(PERIODSYM, ".", 1, 1);
-	else
+	}
+	/*else
+	{
+		errorTokens.push_back(Token(PERIOD, ".", tokens[tokens.size() - 1].getPos().getRow(), tokens[tokens.size() - 1].getPos().getCol()));
 		return Token(PERIODSYM, ".", tokens[tokens.size() - 1].getPos().getRow(), tokens[tokens.size() - 1].getPos().getCol());
+	}*/
 }
 
 bool Lexer::tokensEnd()
 {
 	return tokens.size() == cur;
+}
+
+Position Lexer::lastTokenPos()
+{
+	if (tokens.empty())
+		return Position(1, 1);
+	return tokens[tokens.size() - 1].getPos();
 }

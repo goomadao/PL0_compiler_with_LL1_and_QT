@@ -39,6 +39,7 @@ public:
 	void printTokens();
 	Token nextToken();
 	bool tokensEnd();
+	Position lastTokenPos();
 };
 
 #endif

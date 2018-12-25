@@ -1,8 +1,4 @@
 ﻿#pragma execution_character_set("utf-8")
-/*Todo:
-	i>>10的报错没有解决
-
-*/
 
 
 #include "pch.h"
@@ -14,6 +10,10 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 	{
 		if (lexer.errorTokens[i].getVal() == ":")
 			errorAdd(lexer.errorTokens[i].getPos(), "\":\"must be followed by \"=\"");
+		else if (lexer.errorTokens[i].getVal() == ".")
+		{
+			errorAdd(lexer.lastTokenPos(), "Missing \".\" at the end of the code.");
+		}
 		else
 			errorAdd(lexer.errorTokens[i].getPos(), "Unknown token \"" + lexer.errorTokens[i].getVal() + "\"");
 	}
@@ -81,7 +81,7 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 					currentNode = currentNode->getFather()->child[currentNode->getWz() + 1];//找到了在孩子节点中不是最后一个的节点，下一个待分析的节点就是孩子节点中这个节点的后面那个
 				cout << GrammarDefinition::GrammarSymTypes[parsing.top()] << "和" << currentToekn.getVal() << "匹配,出栈\n";
 				parsing.pop();
-				if (lexer.tokensEnd() && parsing.empty())
+				if (lexer.tokensEnd())
 					;
 				else
 					currentToekn = lexer.nextToken();
@@ -182,7 +182,12 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 								)
 							)
 						{
-							currentToekn = lexer.nextToken();
+							if (lexer.tokensEnd())
+							{
+								;
+							}
+							else
+								currentToekn = lexer.nextToken();
 						}
 						else if (lexerTypeToGrammarType(currentToekn) == GrammarSymSpace::VAR &&
 							(
@@ -191,7 +196,12 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 								)
 							)
 						{
-							currentToekn = lexer.nextToken();
+							if (lexer.tokensEnd())
+							{
+								;
+							}
+							else
+								currentToekn = lexer.nextToken();
 						}
 						else if (lexerTypeToGrammarType(currentToekn) == GrammarSymSpace::PROCEDURELIST &&
 							(
@@ -199,7 +209,12 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 								)
 							)
 						{
-							currentToekn = lexer.nextToken();
+							if (lexer.tokensEnd())
+							{
+								;
+							}
+							else
+								currentToekn = lexer.nextToken();
 						}
 
 
@@ -474,7 +489,12 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 								)
 							)
 						{
-							currentToekn = lexer.nextToken();
+							if (lexer.tokensEnd())
+							{
+								;
+							}
+							else
+								currentToekn = lexer.nextToken();
 						}
 						else if (lexerTypeToGrammarType(currentToekn) == GrammarSymSpace::VAR &&
 							(
@@ -483,7 +503,12 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 								)
 							)
 						{
-							currentToekn = lexer.nextToken();
+							if (lexer.tokensEnd())
+							{
+								;
+							}
+							else
+								currentToekn = lexer.nextToken();
 						}
 						else if (lexerTypeToGrammarType(currentToekn) == GrammarSymSpace::PROCEDURELIST &&
 							(
@@ -491,7 +516,12 @@ Parser::Parser(string t) :lexer(t), currentToekn(lexer.nextToken())
 								)
 							)
 						{
-							currentToekn = lexer.nextToken();
+							if (lexer.tokensEnd())
+							{
+								;
+							}
+							else
+								currentToekn = lexer.nextToken();
 						}
 
 

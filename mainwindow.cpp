@@ -376,7 +376,7 @@ void MainWindow::errorList()
 	}
 	if (parser.errorEmpty())
 	{
-		QMessageBox::warning(this, tr("Warning"), tr("没有检查到错误"));
+		QMessageBox::about(this, tr("No error"), tr("没有检查到错误"));
 		return;
 	}
 	QTableWidget *table = new QTableWidget();
@@ -556,6 +556,7 @@ void MainWindow::run()
 	}
 	QPlainTextEdit *plainEdit = new QPlainTextEdit();
 	plainEdit->setWindowTitle("运行结果");
+	plainEdit->setReadOnly(true);
 	plainEdit->show();
 	QVector<int>s;
 	QString out;
@@ -753,6 +754,7 @@ void MainWindow::run()
 			else
 			{
 				QMessageBox::warning(this, tr("Warning"), tr("由于取消输入，程序终止，请重新运行"));
+				plainEdit->hide();
 				return;
 			}
 
@@ -1073,14 +1075,16 @@ void MainWindow::createActions()
 	QAction *parsingTableAct = LL1Menu->addAction(tr("&预测分析表"), this, &MainWindow::parsingTable);
 	parsingTableAct->setStatusTip(tr("显示PL/0的预测分析表"));
 
+	LL1Menu->addSeparator();
+
+	QAction *parsingAct = LL1Menu->addAction(tr("&LL1语法分析过程"), this, &MainWindow::parsingProc);
+	parsingAct->setStatusTip(tr("显示LL1语法分析过程"));
+
 
 	QMenu *compileMenu = menuBar()->addMenu(tr("&compile"));
 
 	QAction *errorAct = compileMenu->addAction(tr("错误分析"), this, &MainWindow::errorList);
 	errorAct->setStatusTip(tr("显示语法及语义错误"));
-
-	QAction *parsingAct = compileMenu->addAction(tr("&LL1语法分析过程"), this, &MainWindow::parsingProc);
-	parsingAct->setStatusTip(tr("显示LL1语法分析过程"));
 
 	compileMenu->addSeparator();
 
